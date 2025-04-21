@@ -1,0 +1,109 @@
+import style from "./AddModal.module.css";
+
+function AddModal({
+    titleInput,
+    descriptionInput,
+    status,
+    priority,
+    user,
+    usersData,
+    handleTitleInputChange,
+    handleDescriptionInputChange,
+    handleStatusChange,
+    handlePriorityChange,
+    handleUserChange,
+    addTask,
+    toggleAddMode
+}) {
+    return (
+        <div className={style.modalOverlay}>
+            <div className={style.modalContent}>
+                <div className={style.modalHeader}>
+                    <h2 className={style.modalTitle}>Create New Task</h2>
+                    <button className={style.closeButton} onClick={toggleAddMode}>
+                        &times;
+                    </button>
+                </div>
+
+                <div className={style.formGroup}>
+                    <label className={style.formLabel}>Task Title</label>
+                    <input
+                        className={style.formInput}
+                        value={titleInput}
+                        onChange={handleTitleInputChange}
+                        type="text"
+                        placeholder="e.g. Implement user dashboard"
+                    />
+                </div>
+
+                <div className={style.formGroup}>
+                    <label className={style.formLabel}>Description</label>
+                    <input
+                        className={style.formInput}
+                        value={descriptionInput}
+                        onChange={handleDescriptionInputChange}
+                        type="text"
+                        placeholder="Describe the task details"
+                    />
+                </div>
+
+                <div className={style.formGroup}>
+                    <label className={style.formLabel}>Status</label>
+                    <select
+                        name="status"
+                        className={style.formSelect}
+                        value={status}
+                        onChange={handleStatusChange}
+                    >
+                        <option value="todo">To Do</option>
+                        <option value="doing">Doing</option>
+                        <option value="done">Done</option>
+                    </select>
+                </div>
+
+                <div className={style.formGroup}>
+                    <label className={style.formLabel}>Priority</label>
+                    <select
+                        name="priority"
+                        className={style.formSelect}
+                        value={priority}
+                        onChange={handlePriorityChange}
+                    >
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                <div className={style.formGroup}>
+                    <label className={style.formLabel}>Assign To</label>
+                    <select
+                        name="user"
+                        className={`${style.formSelect} ${style.userSelect}`}
+                        value={user}
+                        onChange={handleUserChange}
+                    >
+                        <option value="">Select team member</option>
+                        {usersData.map((user) => (
+                            <option key={user.userId} value={user.name}>
+                                {user.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <button
+                    className={style.submitButton}
+                    onClick={() => {
+                        addTask();
+                        toggleAddMode();
+                    }}
+                >
+                    Create Task
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export default AddModal;

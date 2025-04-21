@@ -1,0 +1,383 @@
+/* Main Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 32px;
+    background-color: #f9fafb;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.appTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.5px;
+}
+
+.addButton {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.addButton:hover {
+    background-color: #4338ca;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Columns Layout */
+.columns {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    padding-bottom: 24px;
+}
+
+.column {
+    flex: 1;
+    min-width: 300px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Column Specific Styles */
+.todoColumn {
+    border-top: 4px solid #3b82f6;
+}
+
+.doingColumn {
+    border-top: 4px solid #f59e0b;
+}
+
+.doneColumn {
+    border-top: 4px solid #10b981;
+}
+
+.columnTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(17, 24, 39, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modalContent {
+    background-color: white;
+    border-radius: 12px;
+    width: 480px;
+    max-width: 95%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.modalTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: color 0.2s;
+}
+
+.closeButton:hover {
+    color: #111827;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formLabel {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.formInput,
+.formSelect {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #111827;
+    background-color: #f9fafb;
+    transition: all 0.2s ease;
+}
+
+.formInput:focus,
+.formSelect:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    background-color: white;
+}
+
+.submitButton {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+}
+
+.submitButton:hover {
+    background-color: #4338ca;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.taskCard {
+    background-color: white;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    border-left: 4px solid;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.taskCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.taskCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.taskCard:hover::before {
+    opacity: 1;
+}
+
+/* Status Specific Card Styles */
+.todoCard {
+    border-left-color: #3b82f6;
+    background-color: #f8fafc;
+}
+
+.doingCard {
+    border-left-color: #f59e0b;
+    background-color: #fffbeb;
+}
+
+.doneCard {
+    border-left-color: #10b981;
+    background-color: #ecfdf5;
+}
+
+.taskTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.taskDescription {
+    font-size: 14px;
+    color: #4b5563;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.taskMeta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.taskBadge {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 9999px;
+}
+
+/* Priority Badges */
+.priorityLow {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.priorityMedium {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.priorityHigh {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Status Badges */
+.statusBadge {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 9999px;
+}
+
+.todoBadge {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.doingBadge {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.doneBadge {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.taskFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.assignee {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.assigneeAvatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #111827;
+}
+
+.assigneeName {
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.taskActions {
+    display: flex;
+    gap: 8px;
+}
+
+.taskButton {
+    border: none;
+    background: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.editButton {
+    color: #4f46e5;
+    background-color: #eef2ff;
+}
+
+.editButton:hover {
+    background-color: #e0e7ff;
+}
+
+.deleteButton {
+    color: #ef4444;
+    background-color: #fee2e2;
+}
+
+.deleteButton:hover {
+    background-color: #fecaca;
+}
