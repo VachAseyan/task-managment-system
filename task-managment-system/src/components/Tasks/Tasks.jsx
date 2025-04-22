@@ -1,58 +1,14 @@
 import { useEffect, useReducer, useState } from "react";
-import style from "./Tasks.module.css"
+import style from "./Tasks.module.css";
 import AddModal from "../AddModal/AddModal";
-import ToDo from "../ToDo/ToDo";
-import Done from "../Done/Done";
-import Doing from "../Doing/Doing";
-
-const genereateId = () => Math.random()
-
-const ACTIONS = {
-    ADD_TASK: "add-task",
-    DELETE_TASK: "delete-task",
-    UPDATE_TASK: "update-task",
-}
-
-const reducer = (state, action) => {
-    const {
-        type,
-        payload
-    } = action
-    switch (type) {
-        case ACTIONS.ADD_TASK: {
-            return [...state, {
-                id: genereateId(),
-                title: payload.title,
-                description: payload.description,
-                status: payload.status,
-                priority: payload.priority,
-                user: payload.user
-            }]
-        }
-        case ACTIONS.DELETE_TASK: {
-            return state.filter(task => task.id !== payload.id)
-        }
-
-        case ACTIONS.UPDATE_TASK: {
-            return state.map(task => {
-                if (task.id === payload.id) {
-                    return {
-                        ...task,
-                        title: payload.title,
-                        description: payload.description,
-                        status: payload.status,
-                        priority: payload.priority,
-                        user: payload.user
-                    }
-                }
-                return task
-            })
-        }
-    }
-}
+import Task from "../Task/Task";
+import { ACTIONS, reducer } from "../../reducers";
 
 function Tasks() {
-    const [tasks, dispatch] = useReducer(reducer, JSON.parse(localStorage?.getItem("tasks") ?? "[]"));
+    const [tasks, dispatch] = useReducer(
+        reducer,
+        JSON.parse(localStorage.getItem("tasks")) ?? []
+    );
     const [isAddMode, setIsAddMode] = useState(false);
     const [titleInput, setTitleInput] = useState("");
     const [descriptionInput, setDescriptionInput] = useState("");
@@ -71,7 +27,7 @@ function Tasks() {
         { userId: 7, name: "Frank Miller" },
         { userId: 8, name: "Grace Lee" },
         { userId: 9, name: "Henry Taylor" },
-        { userId: 10, name: "Ivy Anderson" }
+        { userId: 10, name: "Ivy Anderson" },
     ];
 
     const addTask = () => {
@@ -83,8 +39,8 @@ function Tasks() {
                     description: descriptionInput,
                     status: fixedStatus || statusInput,
                     priority: priority,
-                    user: userInput
-                }
+                    user: userInput,
+                },
             });
             resetForm();
         }
@@ -101,78 +57,48 @@ function Tasks() {
     };
 
     const deleteTask = (id) => {
-        dispatch({
-            type: ACTIONS.DELETE_TASK,
-            payload: { id }
-        });
+        dispatch({ type: ACTIONS.DELETE_TASK, payload: { id } });
     };
 
     const toggleAddMode = (status = null) => {
         setFixedStatus(status);
         setIsAddMode(!isAddMode);
     };
-    const handleTitleInputChange = (e) => {
-        setTitleInput(e.target.value)
-    }
 
-    const handleDescriptionInputChange = (e) => {
-        setDescriptionInput(e.target.value)
-    }
+    const handleTitleInputChange = (e) => setTitleInput(e.target.value);
+    const handleDescriptionInputChange = (e) => setDescriptionInput(e.target.value);
+    const handleUserChange = (e) => setUserInput(e.target.value);
+    const handlePriorityChange = (e) => setPriorityInput(e.target.value);
+    const handleStatusChange = (e) => setStatusInput(e.target.value);
 
-    const handleUserChange = (e) => {
-        setUserInput(e.target.value)
-    }
+    const editTitleInputChange = (id, newTitle) =>
+        dispatch({ type: ACTIONS.UPDATE_TASK, payload: { id, title: newTitle } });
 
-    const handlePriorityChange = (e) => {
-        setPriorityInput(e.target.value)
-    }
+    const editDescriptionInputChange = (id, newDescription) =>
+        dispatch({ type: ACTIONS.UPDATE_TASK, payload: { id, description: newDescription } });
 
-    const handleStatusChange = (e) => {
-        setStatusInput(e.target.value)
-    }
+    const editUserChange = (id, newUser) =>
+        dispatch({ type: ACTIONS.UPDATE_TASK, payload: { id, user: newUser } });
 
-    const editTitleInputChange = (id, newTitle) => {
-        dispatch({
-            type: ACTIONS.UPDATE_TASK,
-            payload: { id, title: newTitle }
-        })
-    }
+    const editPriorityChange = (id, newPriority) =>
+        dispatch({ type: ACTIONS.UPDATE_TASK, payload: { id, priority: newPriority } });
 
-    const editDescriptionInputChange = (id, newDescription) => {
-        dispatch({
-            type: ACTIONS.UPDATE_TASK,
-            payload: { id, description: newDescription }
-        })
-    }
-
-    const editUserChange = (id, newUser) => {
-        dispatch({
-            type: ACTIONS.UPDATE_TASK,
-            payload: { id, user: newUser }
-        })
-    }
-
-    const editPriorityChange = (id, newPriority) => {
-        dispatch({
-            type: ACTIONS.UPDATE_TASK,
-            payload: { id, priority: newPriority }
-        })
-    }
-
-    const editStatusChange = (id, newStatus) => {
-        dispatch({
-            type: ACTIONS.UPDATE_TASK,
-            payload: { id, status: newStatus }
-        })
-    }
+    const editStatusChange = (id, newStatus) =>
+        dispatch({ type: ACTIONS.UPDATE_TASK, payload: { id, status: newStatus } });
 
     useEffect(() => {
         if (tasks.length > 0) {
             localStorage.setItem("tasks", JSON.stringify(tasks));
         } else {
-            localStorage.removeItem("tasks")
+            localStorage.removeItem("tasks");
         }
     }, [tasks]);
+
+    const statusOptions = [
+        { key: "todo", label: "To Do", className: style.todoColumn },
+        { key: "doing", label: "Doing", className: style.doingColumn },
+        { key: "done", label: "Done", className: style.doneColumn },
+    ];
 
     return (
         <div className={style.container}>
@@ -187,12 +113,6 @@ function Tasks() {
                 <div className={style.modalOverlay}>
                     <div className={style.modalContent}>
                         <div className={style.modalHeader}>
-                            <h2 className={style.modalTitle}>
-                                {fixedStatus
-                                    ? `Add ${fixedStatus === 'todo' ? 'To Do' :
-                                        fixedStatus === 'doing' ? 'Doing' : 'Done'} Task`
-                                    : "Create Task"}
-                            </h2>
                             <button className={style.closeButton} onClick={resetForm}>
                                 ×
                             </button>
@@ -218,81 +138,35 @@ function Tasks() {
             )}
 
             <div className={style.columns}>
-                <div className={`${style.column} ${style.todoColumn}`}>
-                    <div className={style.columnHeader}>
-                        <h3 className={style.columnTitle}>To Do</h3>
-                        <button
-                            className={style.addColumnButton}
-                            onClick={() => toggleAddMode("todo")}
-                        >
-                            + Add Task
-                        </button>
+                {statusOptions.map(({ key, label, className }) => (
+                    <div className={`${style.column} ${className}`} key={key}>
+                        <div className={style.columnHeader}>
+                            <h3 className={style.columnTitle}>{label}</h3>
+                            <button className={style.addColumnButton} onClick={() => toggleAddMode(key)}>
+                                Add {label}
+                            </button>
+                        </div>
+                        {tasks
+                            .filter((task) => task.status === key)
+                            .map((task) => (
+                                <Task
+                                    key={task.id}
+                                    id={task.id}
+                                    {...task}
+                                    usersData={usersData}
+                                    deleteTask={deleteTask}
+                                    editPriorityChange={editPriorityChange}
+                                    editStatusChange={editStatusChange}
+                                    editTitleInputChange={editTitleInputChange}
+                                    editDescriptionInputChange={editDescriptionInputChange}
+                                    editUserChange={editUserChange}
+                                />
+                            ))}
                     </div>
-                    {tasks.filter(task => task.status === "todo").map((task) => (
-                        <ToDo
-                            key={task.id}
-                            id={task.id}
-                            {...task}
-                            usersData={usersData}
-                            deleteTask={deleteTask}
-                            editPriorityChange={editPriorityChange}
-                            editStatusChange={editStatusChange}
-                            editTitleInputChange={editTitleInputChange}
-                            editDescriptionInputChange={editDescriptionInputChange}
-                            editUserChange={editUserChange}
-                        />
-                    ))}
-                </div>
-                <div className={`${style.column} ${style.doingColumn}`}>
-                    <div className={style.columnHeader}>
-                        <h3 className={style.columnTitle}>Doing</h3>
-                        <button
-                            className={style.addColumnButton}
-                            onClick={() => toggleAddMode("doing")}
-                        >
-                            + Add Task
-                        </button>
-                    </div>
-                    {tasks.filter(task => task.status === "doing").map((task) => (
-                        <Doing
-                            key={task.id}
-                            id={task.id}
-                            {...task}
-                            usersData={usersData}
-                            deleteTask={deleteTask}
-                            editPriorityChange={editPriorityChange}
-                            editStatusChange={editStatusChange}
-                            editTitleInputChange={editTitleInputChange}
-                            editDescriptionInputChange={editDescriptionInputChange}
-                            editUserChange={editUserChange} />
-                    ))}
-                </div>
-                <div className={`${style.column} ${style.doneColumn}`}>
-                    <div className={style.columnHeader}>
-                        <h3 className={style.columnTitle}>Done</h3>
-                        <button
-                            className={style.addColumnButton}
-                            onClick={() => toggleAddMode("done")}
-                        >
-                            + Add Task
-                        </button>
-                    </div>
-                    {tasks.filter(task => task.status === "done").map((task) => (
-                        <Done key={task.id}
-                            id={task.id}
-                            {...task}
-                            usersData={usersData}
-                            deleteTask={deleteTask}
-                            editPriorityChange={editPriorityChange}
-                            editStatusChange={editStatusChange}
-                            editTitleInputChange={editTitleInputChange}
-                            editDescriptionInputChange={editDescriptionInputChange}
-                            editUserChange={editUserChange} />
-                    ))}
-                </div>
+                ))}
             </div>
         </div>
-    )
+    );
 }
 
-export default Tasks
+export default Tasks;

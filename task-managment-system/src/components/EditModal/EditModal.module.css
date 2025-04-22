@@ -1,18 +1,17 @@
-/* EditModal.module.css */
-
 .modalOverlay {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    backdrop-filter: blur(4px);
-    animation: fadeInOverlay 0.3s ease-out;
+    opacity: 0;
+    animation: fadeInOverlay 0.3s ease-in-out forwards;
 }
 
 @keyframes fadeInOverlay {
@@ -26,20 +25,22 @@
 }
 
 .modalContent {
-    background-color: white;
-    border-radius: 16px;
-    width: 550px;
-    height: 650px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    padding: 32px;
-    animation: modalSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    width: 440px;
+    max-width: 90vw;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
+    overflow: hidden;
 }
 
-@keyframes modalSlideIn {
+@keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(20px) scale(0.95);
+        transform: translateY(20px) scale(0.98);
     }
 
     to {
@@ -52,30 +53,27 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #f3f4f6;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .modalTitle {
     font-size: 22px;
     font-weight: 600;
-    color: #111827;
-    margin: 0;
-    letter-spacing: -0.5px;
+    color: #222;
+    letter-spacing: -0.2px;
 }
 
 .closeButton {
-    background: none;
+    background: transparent;
     border: none;
-    font-size: 28px;
+    font-size: 22px;
     cursor: pointer;
-    color: #9ca3af;
+    color: #aaa;
     transition: all 0.2s;
-    padding: 4px;
-    line-height: 1;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,160 +81,104 @@
 }
 
 .closeButton:hover {
-    color: #ef4444;
-    background-color: #fee2e2;
+    color: #666;
+    background: rgba(0, 0, 0, 0.05);
+    transform: rotate(90deg);
 }
 
 .formGroup {
-    margin-bottom: 24px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
 }
 
 .formLabel {
-    display: block;
-    margin-bottom: 10px;
     font-size: 14px;
-    color: #374151;
+    margin-bottom: 6px;
     font-weight: 500;
+    color: #555;
+    display: flex;
+    align-items: center;
 }
 
 .requiredField::after {
     content: "*";
-    color: #ef4444;
+    color: #ff4d4f;
     margin-left: 4px;
+    font-size: 12px;
 }
 
 .formInput,
-.formSelect {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    font-size: 15px;
-    color: #111827;
-    background-color: #f9fafb;
-    transition: all 0.2s ease;
-    font-family: inherit;
-}
-
-.formInput::placeholder {
-    color: #9ca3af;
-    opacity: 1;
+.formSelect,
+.descriptionInput {
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s;
+    background-color: #fafafa;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+    height:38   px;
 }
 
 .formInput:focus,
-.formSelect:focus {
-    outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    background-color: white;
-}
-
-.descriptionGroup {
-    margin-bottom: 28px;
+.formSelect:focus,
+.descriptionInput:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    background-color: #fff;
 }
 
 .descriptionInput {
-    min-height: 120px;
-    resize: vertical;
+    height: 80px;
+    resize: none;
     line-height: 1.5;
 }
 
-.formSelect {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    background-size: 18px;
-    padding-right: 44px;
-}
-
-.userSelect {
-    position: relative;
-}
-
-.userSelect option {
-    padding: 8px 12px;
-}
-
 .submitButton {
-    background: linear-gradient(to right, #6366f1, #8b5cf6);
-    color: white;
-    border: none;
-    padding: 14px 24px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.3s ease;
+    padding: 12px 20px;
     margin-top: 16px;
-    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: auto;
-}
-
-.submitButton:hover:not(:disabled) {
-    background: linear-gradient(to right, #4f46e5, #7c3aed);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-}
-
-.submitButton:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
-}
-
-.submitButton:disabled {
-    background: #e5e7eb;
-    color: #9ca3af;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
-/* User avatar in select dropdown */
-.userOption {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.userAvatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: #e5e7eb;
+    margin-right: 10px;
+    background: linear-gradient(135deg, #007bff, #0062cc);
+    color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
-    font-weight: 600;
-    color: #374151;
-    flex-shrink: 0;
+    gap: 8px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .modalContent {
-        padding: 24px;
-        width: 90%;
-    }
+.submitButton:hover {
+    background: linear-gradient(135deg, #0062cc, #0052b3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
 
-    .modalTitle {
-        font-size: 20px;
-    }
+.submitButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+}
 
-    .formInput,
-    .formSelect {
-        padding: 10px 14px;
-        font-size: 14px;
-    }
+.submitButton:disabled {
+    background: #e0e0e0;
+    color: #aaa;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
 
-    .submitButton {
-        padding: 12px 20px;
-        font-size: 14px;
-    }
+.userSelect {
+    font-size: 14px;
+}
+
+.userOption {
+    font-size: 14px;
+    padding: 8px 12px;
 }

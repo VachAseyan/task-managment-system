@@ -1,8 +1,8 @@
 import { useState } from "react";
-import style from "./Done.module.css";
+import style from "./Task.module.css";
 import EditModal from "../EditModal/EditModal";
 
-function Done({
+function Task({
     id,
     title,
     description,
@@ -11,12 +11,12 @@ function Done({
     usersData,
     user,
     deleteTask,
-    updateTask,
     editPriorityChange,
     editStatusChange,
     editTitleInputChange,
     editDescriptionInputChange,
-    editUserChange }) {
+    editUserChange
+}) {
     const assignedUser = usersData.find(u => u.name === user);
     const [isEditMode, setIsEditMode] = useState(false);
 
@@ -32,9 +32,7 @@ function Done({
                     <p className={style.taskDescription}>{description}</p>
 
                     <div className={style.taskMeta}>
-                        <span
-                            className={`${style.taskBadge} ${style[`priority${priority.charAt(0).toUpperCase() + priority.slice(1)}`]}`}
-                        >
+                        <span className={`${style.taskBadge} ${style[`priority${priority.charAt(0).toUpperCase() + priority.slice(1)}`]}`}>
                             {priority} Priority
                         </span>
                     </div>
@@ -42,10 +40,7 @@ function Done({
                     {assignedUser && (
                         <div className={style.assignee}>
                             <div className={style.assigneeAvatar}>
-                                {assignedUser.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")}
+                                {assignedUser.name.split(" ").map(n => n[0]).join("")}
                             </div>
                             <div>
                                 <span className={style.assigneeLabel}>Assigned to:</span>
@@ -85,4 +80,4 @@ function Done({
     );
 }
 
-export default Done;
+export default Task;

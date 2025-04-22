@@ -103,9 +103,7 @@ function EditModal({
                         <option value="">Select team member</option>
                         {usersData.map((user) => (
                             <option key={user.userId} value={user.name}>
-                                <span className={style.userOption}>
-                                    {user.name}
-                                </span>
+                                {user.name}
                             </option>
                         ))}
                     </select>
@@ -117,6 +115,13 @@ function EditModal({
                     onClick={handleSave}
                 >
                     Save Changes
+                </button>
+                <button
+                    className={style.submitButton}
+                    disabled={!updatedTitle}
+                    onClick={handleEditModeToggle}
+                >
+                    Cancel
                 </button>
             </div>
         </div>
