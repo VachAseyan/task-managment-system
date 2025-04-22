@@ -151,7 +151,6 @@
     margin-right: 4px;
 }
 
-/* Status ribbon for cards */
 .taskCard::after {
     content: attr(data-status);
     position: absolute;
@@ -182,4 +181,68 @@
 .doneCard::after {
     background-color: #10b981;
     content: "Done";
+}
+
+/* Add these styles to your existing CSS */
+
+/* Button Container */
+.taskActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    padding-left: 24px;
+}
+
+/* Base Button Styles */
+.taskCard button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+}
+
+/* Delete Button */
+.taskCard button:first-of-type {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.taskCard button:first-of-type:hover {
+    background-color: #fecaca;
+    color: #b91c1c;
+}
+
+/* Edit Button */
+.taskCard button:last-of-type {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.taskCard button:last-of-type:hover {
+    background-color: #bae6fd;
+    color: #075985;
+}
+
+/* Button Icons */
+.taskCard button svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
+}
+
+/* Active States */
+.taskCard button:active {
+    transform: scale(0.98);
+}
+
+/* Focus States */
+.taskCard button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
 }

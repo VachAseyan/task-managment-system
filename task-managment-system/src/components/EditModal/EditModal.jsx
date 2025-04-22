@@ -1,36 +1,52 @@
-import style from "./AddModal.module.css";
+import { useState } from "react";
+import style from "./EditModal.module.css";
 
-function AddModal({
+function EditModal({
+    id,
+    usersData,
     titleInput,
     descriptionInput,
     status,
     priority,
     user,
-    usersData,
-    handleTitleInputChange,
-    handleDescriptionInputChange,
-    handleStatusChange,
-    handlePriorityChange,
-    handleUserChange,
-    addTask,
-    toggleAddMode
+    editTitleInputChange,
+    editDescriptionInputChange,
+    editStatusChange,
+    editPriorityChange,
+    editUserChange,
+    handleEditModeToggle,
 }) {
+    const [updatedTitle, setUpdatedTitle] = useState(titleInput);
+    const [updatedDescription, setUpdatedDescription] = useState(descriptionInput);
+    const [updatedStatus, setUpdatedStatus] = useState(status);
+    const [updatedPriority, setUpdatedPriority] = useState(priority);
+    const [updatedUser, setUpdatedUser] = useState(user);
+
+    const handleSave = () => {
+        editTitleInputChange(id, updatedTitle);
+        editDescriptionInputChange(id, updatedDescription);
+        editStatusChange(id, updatedStatus);
+        editPriorityChange(id, updatedPriority);
+        editUserChange(id, updatedUser);
+        handleEditModeToggle();
+    };
+
     return (
         <div className={style.modalOverlay}>
             <div className={style.modalContent}>
                 <div className={style.modalHeader}>
-                    <h2 className={style.modalTitle}>Create New Task</h2>
-                    <button className={style.closeButton} onClick={toggleAddMode}>
+                    <h2 className={style.modalTitle}>Edit Task</h2>
+                    <button className={style.closeButton} onClick={handleEditModeToggle}>
                         &times;
                     </button>
                 </div>
 
                 <div className={style.formGroup}>
-                    <label className={style.formLabel}>Task Title*</label>
+                    <label className={`${style.formLabel} ${style.requiredField}`}>Task Title</label>
                     <input
                         className={style.formInput}
-                        value={titleInput}
-                        onChange={handleTitleInputChange}
+                        value={updatedTitle}
+                        onChange={e => setUpdatedTitle(e.target.value)}
                         type="text"
                         placeholder="e.g. Implement user dashboard"
                         required
@@ -41,16 +57,11 @@ function AddModal({
                     <label className={style.formLabel}>Description</label>
                     <textarea
                         className={`${style.formInput} ${style.descriptionInput}`}
-                        value={descriptionInput}
-                        onChange={handleDescriptionInputChange}
+                        value={updatedDescription}
+                        onChange={e => setUpdatedDescription(e.target.value)}
                         placeholder="Describe the task details..."
                         rows="4"
                     />
-                    {descriptionInput.length > 0 && (
-                        <div className={style.charCount}>
-                            {descriptionInput.length}/500
-                        </div>
-                    )}
                 </div>
 
                 <div className={style.formGroup}>
@@ -58,8 +69,8 @@ function AddModal({
                     <select
                         name="status"
                         className={style.formSelect}
-                        value={status}
-                        onChange={handleStatusChange}
+                        value={updatedStatus}
+                        onChange={e => setUpdatedStatus(e.target.value)}
                     >
                         <option value="todo">To Do</option>
                         <option value="doing">Doing</option>
@@ -72,8 +83,8 @@ function AddModal({
                     <select
                         name="priority"
                         className={style.formSelect}
-                        value={priority}
-                        onChange={handlePriorityChange}
+                        value={updatedPriority}
+                        onChange={e => setUpdatedPriority(e.target.value)}
                     >
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
@@ -86,28 +97,30 @@ function AddModal({
                     <select
                         name="user"
                         className={`${style.formSelect} ${style.userSelect}`}
-                        value={user}
-                        onChange={handleUserChange}
+                        value={updatedUser}
+                        onChange={e => setUpdatedUser(e.target.value)}
                     >
                         <option value="">Select team member</option>
                         {usersData.map((user) => (
                             <option key={user.userId} value={user.name}>
-                                {user.name}
+                                <span className={style.userOption}>
+                                    {user.name}
+                                </span>
                             </option>
                         ))}
                     </select>
                 </div>
 
                 <button
-                    className={style.submitButton}  
-                    onClick={addTask}
-                    disabled={!titleInput || !descriptionInput || !user || !status || !priority}
+                    className={style.submitButton}
+                    disabled={!updatedTitle}
+                    onClick={handleSave}
                 >
-                    Create Task
+                    Save Changes
                 </button>
             </div>
         </div>
     );
 }
 
-export default AddModal;
+export default EditModal;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./Tasks.module.css"
 import AddModal from "../AddModal/AddModal";
 import ToDo from "../ToDo/ToDo";
@@ -6,21 +6,15 @@ import Done from "../Done/Done";
 import Doing from "../Doing/Doing";
 
 function Tasks() {
-    const [tasks, setTasks] = useState([])
-
-    const [formData, setFormData] = useState({
-        title: "",
-        description: "",
-        status: "todo",
-        priority: "low",
-        user: ""
-    });
-
+    const [tasks, setTasks] = useState(JSON.parse(localStorage?.getItem("tasks") ?? "[]"))
     const [isAddMode, setIsAddMode] = useState(false)
     const [titleInput, setTitleInput] = useState("");
     const [descriptionInput, setDescriptionInput] = useState("");
+    const [statusInput, setStatusInput] = useState("todo");
+    const [priority, setPriorityInput] = useState("low");
+    const [userInput, setUserInput] = useState("");
 
-    const genereateId = () => Math.random().toString(36).substring(2, 9)
+    const genereateId = () => Math.random()
 
     const usersData = [
         { userId: 1, name: "John Doe" },
@@ -36,10 +30,21 @@ function Tasks() {
     ]
 
     const addTask = () => {
-        if (formData.title && formData.description) {
-            setTasks([...tasks, { ...formData, id: genereateId() }])
-            setTitleInput("")
-            setDescriptionInput("")
+        if (titleInput && descriptionInput) {
+            setTasks([...tasks, {
+                id: genereateId(),
+                title: titleInput,
+                description: descriptionInput,
+                status: statusInput || "todo",
+                priority: priority || "low",
+                user: userInput
+            }])
+            setTitleInput("");
+            setDescriptionInput("");
+            setStatusInput("");
+            setPriorityInput("");
+            setUserInput("");
+            setIsAddMode(false);
         }
     }
 
@@ -49,39 +54,55 @@ function Tasks() {
 
     const handleTitleInputChange = (e) => {
         setTitleInput(e.target.value)
-        setFormData(prev => ({ ...prev, title: e.target.value }))
     }
 
     const handleDescriptionInputChange = (e) => {
         setDescriptionInput(e.target.value)
-        setFormData(prev => ({ ...prev, description: e.target.value }))
     }
 
     const handleUserChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }))
+        setUserInput(e.target.value)
     }
 
     const handlePriorityChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }))
+        setPriorityInput(e.target.value)
     }
 
     const handleStatusChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }))
+        setStatusInput(e.target.value)
     }
 
-    console.log(tasks)
+    const deleteTask = (id) => {
+        setTasks(tasks.filter(task => task.id !== id))
+    }
+
+    const editTitleInputChange = (id, newTitle) => {
+        setTasks(prev => prev.map(task => task.id === id ? { ...task, title: newTitle } : task))
+    }
+
+    const editDescriptionInputChange = (id, newDescription) => {
+        setTasks(prev => prev.map(task => task.id === id ? { ...task, description: newDescription } : task))
+    }
+
+    const editUserChange = (id, newUser) => {
+        setTasks(prev => prev.map(task => task.id === id ? { ...task, user: newUser } : task))
+    }
+
+    const editPriorityChange = (id, newPriority) => {
+        setTasks(prev => prev.map(task => task.id === id ? { ...task, priority: newPriority } : task))
+    }
+
+    const editStatusChange = (id, newStatus) => {
+        setTasks(prev => prev.map(task => task.id === id ? { ...task, status: newStatus } : task))
+    }
+
+    useEffect(() => {
+        if (tasks.length > 0) {
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+    }, [tasks]);
+
+    // console.log(tasks)
 
     return (
         <div className={style.container}>
@@ -102,14 +123,16 @@ function Tasks() {
                             </button>
                         </div>
                         <AddModal
-                            {...formData}
                             addTask={addTask}
                             usersData={usersData}
                             titleInput={titleInput}
                             descriptionInput={descriptionInput}
+                            status={statusInput}
+                            priority={priority}
+                            user={userInput}
+                            toggleAddMode={toggleAddMode}
                             handleTitleInputChange={handleTitleInputChange}
                             handleDescriptionInputChange={handleDescriptionInputChange}
-                            toggleAddMode={toggleAddMode}
                             handleStatusChange={handleStatusChange}
                             handlePriorityChange={handlePriorityChange}
                             handleUserChange={handleUserChange}
@@ -122,19 +145,49 @@ function Tasks() {
                 <div className={`${style.column} ${style.todoColumn}`}>
                     <h3 className={style.columnTitle}>To Do</h3>
                     {tasks.filter(task => task.status === "todo").map((task) => (
-                        <ToDo key={task.id} {...task} usersData={usersData} />
+                        <ToDo
+                            key={task.id}
+                            id={task.id}
+                            {...task}
+                            usersData={usersData}
+                            deleteTask={deleteTask}
+                            editPriorityChange={editPriorityChange}
+                            editStatusChange={editStatusChange}
+                            editTitleInputChange={editTitleInputChange}
+                            editDescriptionInputChange={editDescriptionInputChange}
+                            editUserChange={editUserChange}
+                />
                     ))}
                 </div>
                 <div className={`${style.column} ${style.doingColumn}`}>
                     <h3 className={style.columnTitle}>Doing</h3>
                     {tasks.filter(task => task.status === "doing").map((task) => (
-                        <Doing key={task.id} {...task} usersData={usersData} />
+                        <Doing
+                            key={task.id}
+                            id={task.id}
+                            {...task}
+                            usersData={usersData}
+                            deleteTask={deleteTask}
+                            editPriorityChange={editPriorityChange}
+                            editStatusChange={editStatusChange}
+                            editTitleInputChange={editTitleInputChange}
+                            editDescriptionInputChange={editDescriptionInputChange}
+                            editUserChange={editUserChange} />
                     ))}
                 </div>
                 <div className={`${style.column} ${style.doneColumn}`}>
                     <h3 className={style.columnTitle}>Done</h3>
                     {tasks.filter(task => task.status === "done").map((task) => (
-                        <Done key={task.id} {...task} usersData={usersData} />
+                        <Done key={task.id}
+                            id={task.id}
+                            {...task}
+                            usersData={usersData}
+                            deleteTask={deleteTask}
+                            editPriorityChange={editPriorityChange}
+                            editStatusChange={editStatusChange}
+                            editTitleInputChange={editTitleInputChange}
+                            editDescriptionInputChange={editDescriptionInputChange}
+                            editUserChange={editUserChange} />
                     ))}
                 </div>
             </div>
