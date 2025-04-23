@@ -3,13 +3,14 @@
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 16px;
-    width: 380px;
+    width: 250px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     border-left: 4px solid;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     overflow: hidden;
     cursor: grab;
+    height: auto;
 }
 
 .taskCard:hover {
@@ -17,30 +18,86 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
+.taskCard:active {
+    cursor: grabbing;
+}
+
+.dragging {
+    opacity: 0.6;
+    transform: scale(0.95);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
 .todoCard {
     border-color: #3b82f6;
-    background: linear-gradient(to right, #f8fafc 0%, white 15%);
+    background: linear-gradient(to right, rgba(239, 246, 255, 0.5) 0%, white 15%);
 }
 
 .doingCard {
     border-color: #f59e0b;
-    background: linear-gradient(to right, #fffbeb 0%, white 15%);
+    background: linear-gradient(to right, rgba(255, 251, 235, 0.5) 0%, white 15%);
 }
 
 .doneCard {
-    border-left-color: #10b981;
-    background: linear-gradient(to right, #ecfdf5 0%, white 15%);
+    border-color: #10b981;
+    background: linear-gradient(to right, rgba(236, 253, 245, 0.5) 0%, white 15%);
+}
+
+.blockedCard {
+    border-color: #ef4444;
+    background: linear-gradient(to right, rgba(254, 242, 242, 0.5) 0%, white 15%);
+}
+
+.taskCard::after {
+    content: attr(data-status);
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    width: 90px;
+    padding: 4px 0;
+    background-color: #9ca3af;
+    color: white;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transform-origin: left;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    letter-spacing: 0.5px;
+    z-index: 1;
+}
+
+.todoCard::after {
+    background-color: #3b82f6;
+    content: "To Do";
+}
+
+.doingCard::after {
+    background-color: #f59e0b;
+    content: "In Progress";
+}
+
+.doneCard::after {
+    background-color: #10b981;
+    content: "Completed";
+}
+
+.blockedCard::after {
+    background-color: #ef4444;
+    content: "Blocked";
 }
 
 .taskTitle {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     color: #111827;
-    margin-bottom: 12px;
+    margin: 0 0 14px 0;
     display: flex;
     align-items: center;
     position: relative;
     padding-left: 24px;
+    line-height: 1.4;
+    word-break: break-word;
 }
 
 .taskTitle::before {
@@ -53,6 +110,7 @@
     height: 12px;
     border-radius: 50%;
     background-color: currentColor;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
 }
 
 .todoCard .taskTitle::before {
@@ -67,6 +125,10 @@
     background-color: #10b981;
 }
 
+.blockedCard .taskTitle::before {
+    background-color: #ef4444;
+}
+
 .taskDescription {
     font-size: 14px;
     line-height: 1.6;
@@ -74,13 +136,14 @@
     margin-bottom: 16px;
     padding-left: 24px;
     position: relative;
+    word-break: break-word;
 }
 
 .taskDescription::before {
-    content: "•";
     position: absolute;
     left: 8px;
     color: #9ca3af;
+    font-size: 16px;
 }
 
 .taskMeta {
@@ -94,26 +157,30 @@
 .taskBadge {
     font-size: 12px;
     font-weight: 600;
-    padding: 6px 12px;
+    padding: 5px 12px;
     border-radius: 20px;
     display: inline-flex;
     align-items: center;
     text-transform: capitalize;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .priorityLow {
     background-color: #e0f2fe;
     color: #0369a1;
+    border: 1px solid #bae6fd;
 }
 
 .priorityMedium {
     background-color: #fef3c7;
     color: #92400e;
+    border: 1px solid #fde68a;
 }
 
 .priorityHigh {
     background-color: #fee2e2;
     color: #991b1b;
+    border: 1px solid #fecaca;
 }
 
 .assignee {
@@ -127,24 +194,70 @@
     font-size: 14px;
     color: #4b5563;
     border-left: 3px solid #e5e7eb;
+    transition: all 0.2s ease;
+}
+
+.todoCard .assignee {
+    border-left-color: rgba(59, 130, 246, 0.5);
+}
+
+.doingCard .assignee {
+    border-left-color: rgba(245, 158, 11, 0.5);
+}
+
+.doneCard .assignee {
+    border-left-color: rgba(16, 185, 129, 0.5);
+}
+
+.blockedCard .assignee {
+    border-left-color: rgba(239, 68, 68, 0.5);
+}
+
+.assignee:hover {
+    background-color: #f3f4f6;
 }
 
 .assigneeAvatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: #e5e7eb;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    color: #111827;
+    color: white;
     font-size: 14px;
     flex-shrink: 0;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+
+.todoCard .assigneeAvatar {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.doingCard .assigneeAvatar {
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+.doneCard .assigneeAvatar {
+    background: linear-gradient(135deg, #059669, #10b981);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.blockedCard .assigneeAvatar {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
 }
 
 .assigneeName {
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
 }
 
 .assigneeLabel {
@@ -153,73 +266,99 @@
     margin-right: 4px;
 }
 
-.taskCard::after {
-    content: attr(data-status);
-    position: absolute;
-    top: 12px;
-    right: -24px;
-    width: 100px;
-    padding: 4px 0;
-    background-color: currentColor;
-    color: white;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    transform: rotate(45deg);
-    transform-origin: left;
-}
-
-.todoCard::after {
-    background-color: #3b82f6;
-    content: "To Do";
-}
-
-.doingCard::after {
-    background-color: #f59e0b;
-    content: "Doing";
-}
-
-.doneCard::after {
-    background-color: #10b981;
-    content: "Done";
-}
-
 .actions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     margin-top: 16px;
     padding-left: 24px;
+}
+
+.deleteButton,
+.editButton {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
 }
 
 .deleteButton {
     background-color: #fee2e2;
     color: #dc2626;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    border: 1px solid #fecaca;
 }
 
 .deleteButton:hover {
     background-color: #fecaca;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.15);
+}
+
+.deleteButton:active {
+    transform: translateY(0);
+    box-shadow: none;
 }
 
 .editButton {
     background-color: #e0f2fe;
     color: #0369a1;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    border: 1px solid #bae6fd;
 }
 
 .editButton:hover {
     background-color: #bae6fd;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(3, 105, 161, 0.15);
+}
+
+.editButton:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.editModal {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #6366f1;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 640px) {
+    .taskCard {
+        padding: 16px;
+    }
+
+    .taskTitle {
+        font-size: 16px;
+        padding-left: 20px;
+    }
+
+    .taskDescription {
+        padding-left: 20px;
+    }
+
+    .taskMeta {
+        padding-left: 20px;
+    }
+
+    .actions {
+        padding-left: 20px;
+        flex-wrap: wrap;
+    }
+
+    .deleteButton,
+    .editButton {
+        min-width: 70px;
+        padding: 6px 12px;
+        font-size: 13px;
+    }
 }

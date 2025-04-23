@@ -15,7 +15,9 @@ function Task({
     editStatusChange,
     editTitleInputChange,
     editDescriptionInputChange,
-    editUserChange
+    editUserChange,
+    onDragStart,
+    isDragging
 }) {
     const assignedUser = usersData.find(u => u.name === user);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -27,7 +29,11 @@ function Task({
     return (
         <>
             {!isEditMode ? (
-                <div className={`${style.taskCard} ${style[`${status}Card`]}`} data-status={status}>
+                <div className={`${style.taskCard} ${style[`${status}Card`]} ${isDragging ? style.dragging : ''
+                    }`}
+                    draggable
+                    onDragStart={() => onDragStart(id)}
+                    onDragEnd={() => { }}>
                     <h4 className={style.taskTitle}>{title}</h4>
                     <p className={style.taskDescription}>{description}</p>
 

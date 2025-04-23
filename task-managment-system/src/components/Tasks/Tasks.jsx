@@ -16,6 +16,40 @@ function Tasks() {
     const [priority, setPriorityInput] = useState("low");
     const [userInput, setUserInput] = useState("");
     const [fixedStatus, setFixedStatus] = useState(null);
+    const [dragOverStatus, setDragOverStatus] = useState(null);
+
+    const handleDragStart = (e, task) => {
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", task.id);
+        e.currentTarget.classList.add(style.dragging);
+    };
+
+    const handleDragOver = (e, status) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        setDragOverStatus(status);
+    };
+
+    const handleDragEnd = () => {
+        setDragOverStatus(null);
+        document.querySelectorAll(`.${style.dragging}`).forEach(el => {
+            el.classList.remove(style.dragging);
+        });
+    };
+
+    const handleDrop = (e, status) => {
+        e.preventDefault();
+        const taskId = e.dataTransfer.getData("text/plain");
+        const task = tasks.find(t => t.id.toString() === taskId);
+
+        if (task && task.status !== status) {
+            dispatch({
+                type: ACTIONS.UPDATE_TASK,
+                payload: { id: task.id, status: status }
+            });
+        }
+        setDragOverStatus(null);
+    };
 
     const usersData = [
         { userId: 1, name: "Vache Aseyan" },
@@ -34,6 +68,7 @@ function Tasks() {
         { key: "todo", label: "To Do", className: style.todoColumn },
         { key: "doing", label: "Doing", className: style.doingColumn },
         { key: "done", label: "Done", className: style.doneColumn },
+        { key: "blocked", label: "Blocked", className: style.blockedColumn },
     ];
 
     const toggleAddMode = (status = null) => {
@@ -107,16 +142,24 @@ function Tasks() {
     return (
         <div className={style.container}>
             <div className={style.header}>
-                <h1>Task Board</h1>
-                <button className={style.addButton} onClick={() => toggleAddMode()}>
-                    Add Task
-                </button>
+                <h1 className={style.appTitle}>Task Board</h1>
+                <div className={style.headerActions}>
+                    <button className={style.addButton} onClick={() => toggleAddMode()}>
+                        Add Task
+                    </button>
+                    {tasks.length > 0 && (
+                        <button className={style.deleteAllButton} onClick={deleteAll}>
+                            Delete All Tasks
+                        </button>
+                    )}
+                </div>
             </div>
 
             {isAddMode && (
                 <div className={style.modalOverlay}>
                     <div className={style.modalContent}>
                         <div className={style.modalHeader}>
+                            <h2 className={style.modalTitle}>Add New Task</h2>
                             <button className={style.closeButton} onClick={toggleAddMode}>
                                 ×
                             </button>
@@ -143,35 +186,60 @@ function Tasks() {
 
             <div className={style.columns}>
                 {statusOptions.map(({ key, label, className }) => (
-                    <div className={`${style.column} ${className}`} key={key}>
+
+
+
+                    <div
+                        className={`${style.column} ${className} ${dragOverStatus === key ? style.dragOver : ''}`}
+                        key={key}
+                        onDragOver={(e) => handleDragOver(e, key)}
+                        onDrop={(e) => handleDrop(e, key)}
+                        onDragLeave={() => setDragOverStatus(null)}
+                    >
                         <div className={style.columnHeader}>
                             <h3 className={style.columnTitle}>{label}</h3>
-                            <button className={style.addColumnButton} onClick={() => toggleAddMode(key)}>
-                                Add {label}
-                            </button>
+                            {key !== 'blocked' && (
+                                <button className={style.addColumnButton} onClick={() => toggleAddMode(key)}>
+                                    Add task
+                                </button>
+                            )}
+
                         </div>
-                        {tasks
-                            .filter(task => task.status === key)
-                            .map(task => (
-                                <Task
-                                    key={task.id}
-                                    id={task.id}
-                                    {...task}
-                                    usersData={usersData}
-                                    deleteTask={deleteTask}
-                                    editPriorityChange={editPriorityChange}
-                                    editStatusChange={editStatusChange}
-                                    editTitleInputChange={editTitleInputChange}
-                                    editDescriptionInputChange={editDescriptionInputChange}
-                                    editUserChange={editUserChange}
-                                />
-                            ))}
+                        <div className={style.taskList}>
+                            {tasks.filter(task => task.status === key).length > 0 ? (
+                                tasks
+                                    .filter(task => task.status === key)
+                                    .map(task => (
+                                        <div
+                                            key={task.id}
+                                            draggable
+                                            onDragStart={(e) => handleDragStart(e, task)}
+                                            onDragEnd={handleDragEnd}
+                                            className={style.taskContainer}
+                                        >
+                                            <Task
+                                                id={task.id}
+                                                {...task}
+                                                usersData={usersData}
+                                                deleteTask={deleteTask}
+                                                editPriorityChange={editPriorityChange}
+                                                editStatusChange={editStatusChange}
+                                                editTitleInputChange={editTitleInputChange}
+                                                editDescriptionInputChange={editDescriptionInputChange}
+                                                editUserChange={editUserChange}
+                                            />
+                                        </div>
+                                    ))
+                            ) : (
+                                <div className={style.emptyState}>
+                                    <p className={style.emptyText}>No tasks</p>
+
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>
-            {tasks.length > 0 &&
-                <button className={style.deleteButton} onClick={deleteAll}>Delete All</button>}
-
         </div>
     );
 }

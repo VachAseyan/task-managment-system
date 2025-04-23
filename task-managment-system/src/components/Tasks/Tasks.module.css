@@ -13,13 +13,21 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.headerActions {
+    display: flex;
+    gap: 12px;
 }
 
 .appTitle {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
     color: #111827;
     letter-spacing: -0.5px;
+    margin: 0;
 }
 
 .addButton {
@@ -33,6 +41,9 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .addButton:hover {
@@ -41,268 +52,179 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.addButton svg {
+    width: 16px;
+    height: 16px;
+}
+
+.deleteAllButton {
+    background-color: #f43f5e;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.deleteAllButton:hover {
+    background-color: #e11d48;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(244, 63, 94, 0.1);
+}
+
 .columns {
     display: flex;
-    gap: 32px;
+    gap: 24px;
     overflow-x: auto;
-    padding-bottom: 24px;
-    padding-top: 16px;
+    padding: 16px 0 24px;
     scroll-behavior: smooth;
+    align-items: flex-start;
 }
 
 .column {
-    flex: 1;
-    min-width: 320px;
-    height: 100%;
-    min-height: 120px;
-    background: linear-gradient(145deg, #f9fafb, #ffffff);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex: 0 0 300px;
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e5e7eb;
+    height: auto;
+    max-height: 100%;
+}
+
+
+.column.dragOver {
+    background-color: #f8fafc;
+    border: 3px dashed #c7d2fe;
 }
 
 .todoColumn {
-    border-top: 6px solid #3b82f6;
-    border-left: 4px solid #3b82f6;
+    border-top: 4px solid #3b82f6;
 }
 
 .doingColumn {
-    border-top: 6px solid #f59e0b;
-    border-left: 4px solid #f59e0b;
+    border-top: 4px solid #f59e0b;
 }
 
 .doneColumn {
-    border-top: 6px solid #10b981;
-    border-left: 4px solid #10b981;
+    border-top: 4px solid #10b981;
+}
+
+.blockedColumn {
+    border-top: 4px solid #ef4444;
 }
 
 .columnHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 2px dashed #d1d5db;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .columnTitle {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 600;
     color: #1f2937;
     text-transform: uppercase;
-    letter-spacing: 0.75px;
+    letter-spacing: 0.5px;
+    margin: 0;
 }
 
 .addColumnButton {
-    background: rgba(255, 255, 255, 0.9);
+    background: none;
     border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    position: relative;
-    overflow: hidden;
-    margin-left: 12px;
 }
 
 .todoColumn .addColumnButton {
-    background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
-    color: #0369a1;
-    border: 1px solid #bae6fd;
+    color: #3b82f6;
+    background-color: #eff6ff;
 }
 
 .doingColumn .addColumnButton {
-    background: linear-gradient(135deg, #fef3c7, #fffbeb);
-    color: #92400e;
-    border: 1px solid #fde68a;
-}
-
-.doneColumn .addColumnButton {
-    background: linear-gradient(135deg, #dcfce7, #f0fdf4);
-    color: #166534;
-    border: 1px solid #bbf7d0;
-}
-
-/* Hover effects */
-.addColumnButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.todoColumn .addColumnButton:hover {
-    background: linear-gradient(135deg, #bae6fd, #e0f2fe);
-}
-
-.doingColumn .addColumnButton:hover {
-    background: linear-gradient(135deg, #fde68a, #fef3c7);
-}
-
-.doneColumn .addColumnButton:hover {
-    background: linear-gradient(135deg, #bbf7d0, #dcfce7);
-}
-
-.addColumnButton:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-}
-
-.addColumnButton:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-}
-
-.taskList {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.taskCard {
-    background-color: white;
-    border-radius: 10px;
-    padding: 18px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    border-left: 4px solid;
-    transition: all 0.2s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.taskCard:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-}
-
-.todoCard {
-    border-left-color: #3b82f6;
-    background-color: #f8fafc;
-}
-
-.doingCard {
-    border-left-color: #f59e0b;
+    color: #f59e0b;
     background-color: #fffbeb;
 }
 
-.doneCard {
-    border-left-color: #10b981;
+.doneColumn .addColumnButton {
+    color: #10b981;
     background-color: #ecfdf5;
 }
 
-.taskTitle {
-    font-size: 16px;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 8px;
+.blockedColumn .addColumnButton {
+    color: #ef4444;
+    background-color: #fef2f2;
 }
 
-.taskDescription {
-    font-size: 14px;
-    color: #4b5563;
-    margin-bottom: 12px;
-    line-height: 1.5;
+.addColumnButton:hover {
+    transform: translateY(-1px);
 }
 
-.taskMeta {
+.taskList {
+    flex: 1;
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    padding: 4px;
+    height: 20px;
 }
 
-.taskBadge {
-    font-size: 12px;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 9999px;
+
+
+.taskContainer {
+    transition: transform 0.2s, opacity 0.2s;
 }
 
-.priorityLow {
-    background-color: #d1fae5;
-    color: #065f46;
+.taskContainer.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
 }
 
-.priorityMedium {
-    background-color: #fef3c7;
-    color: #92400e;
-}
-
-.priorityHigh {
-    background-color: #fee2e2;
-    color: #991b1b;
-}
-
-.taskFooter {
+.emptyState {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 12px;
-    border-top: 1px solid #e5e7eb;
-}
-
-.assignee {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.assigneeAvatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background-color: #e5e7eb;
-    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
-    font-weight: 500;
-    color: #111827;
+    text-align: center;
+    padding: 24px 12px;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    border: 1px dashed #e2e8f0;
+    color: #64748b;
 }
 
-.assigneeName {
-    font-size: 13px;
-    color: #4b5563;
-}
-
-.taskActions {
-    display: flex;
-    gap: 8px;
-}
-
-.taskButton {
+.emptyAddButton {
+    background-color: #f1f5f9;
+    color: #475569;
     border: none;
-    background: none;
-    padding: 6px 10px;
+    padding: 8px 16px;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-.editButton {
-    color: #4f46e5;
-    background-color: #eef2ff;
-}
-
-.editButton:hover {
-    background-color: #e0e7ff;
-}
-
-.deleteButton {
-    color: #ef4444;
-    background-color: #fee2e2;
-}
-
-.deleteButton:hover {
-    background-color: #fecaca;
+.emptyAddButton:hover {
+    background-color: #e2e8f0;
 }
 
 .modalOverlay {
@@ -346,66 +268,16 @@
 .closeButton {
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
     color: #6b7280;
     transition: color 0.2s;
+    padding: 4px;
+    line-height: 1;
 }
 
 .closeButton:hover {
     color: #111827;
-}
-
-.formGroup {
-    margin-bottom: 20px;
-}
-
-.formLabel {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: #4b5563;
-    font-weight: 500;
-}
-
-.formInput,
-.formSelect {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #111827;
-    background-color: #f9fafb;
-    transition: all 0.2s ease;
-}
-
-.formInput:focus,
-.formSelect:focus {
-    outline: none;
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-    background-color: white;
-}
-
-.submitButton {
-    background-color: #4f46e5;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.2s ease;
-    margin-top: 8px;
-}
-
-.submitButton:hover {
-    background-color: #4338ca;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes fadeIn {
@@ -418,46 +290,4 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 0.5;
-    }
-
-    100% {
-        transform: scale(20, 20);
-        opacity: 0;
-    }
-}
-
-.deleteButton {
-    padding: 6px 12px;
-    background: linear-gradient(135deg, #ff4d4f, #d9363e);
-    color: #fff;
-    font-weight: 600;
-    font-size: 23px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(255, 77, 79, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    min-width: 140px;
-    height: 60px;
-}
-
-.deleteButton:hover {
-    background: linear-gradient(135deg, #d9363e, #b71c1c);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(255, 77, 79, 0.3);
-}
-
-.deleteButton:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(255, 77, 79, 0.2);
 }
