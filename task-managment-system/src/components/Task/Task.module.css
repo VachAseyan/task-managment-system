@@ -1,255 +1,288 @@
 .taskCard {
     background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 16px;
-    width: 250px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    border-left: 4px solid;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    width: 273px;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.05),
+        0 4px 16px rgba(0, 0, 0, 0.08);
+    border-left: 5px solid;
+    transition: all 0.3s ease-out;
     position: relative;
     overflow: hidden;
     cursor: grab;
     height: auto;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .taskCard:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.08),
+        0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .taskCard:active {
     cursor: grabbing;
+    transform: scale(0.98) translateY(0);
 }
 
 .dragging {
-    opacity: 0.6;
-    transform: scale(0.95);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0.8;
+    transform: scale(0.96);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.15),
+        0 0 0 2px rgba(99, 102, 241, 0.3);
+    z-index: 10;
 }
 
 .todoCard {
     border-color: #3b82f6;
-    background: linear-gradient(to right, rgba(239, 246, 255, 0.5) 0%, white 15%);
+    background: linear-gradient(135deg,
+            rgba(239, 246, 255, 0.6) 0%,
+            rgba(255, 255, 255, 0.9) 100%);
 }
 
 .doingCard {
     border-color: #f59e0b;
-    background: linear-gradient(to right, rgba(255, 251, 235, 0.5) 0%, white 15%);
+    background: linear-gradient(135deg,
+            rgba(255, 251, 235, 0.6) 0%,
+            rgba(255, 255, 255, 0.9) 100%);
 }
 
 .doneCard {
     border-color: #10b981;
-    background: linear-gradient(to right, rgba(236, 253, 245, 0.5) 0%, white 15%);
+    background: linear-gradient(135deg,
+            rgba(236, 253, 245, 0.6) 0%,
+            rgba(255, 255, 255, 0.9) 100%);
 }
 
 .blockedCard {
     border-color: #ef4444;
-    background: linear-gradient(to right, rgba(254, 242, 242, 0.5) 0%, white 15%);
+    background: linear-gradient(135deg,
+            rgba(254, 242, 242, 0.6) 0%,
+            rgba(255, 255, 255, 0.9) 100%);
 }
 
-.taskCard::after {
+.taskCard::before {
     content: attr(data-status);
     position: absolute;
-    top: 12px;
-    right: 10px;
-    width: 90px;
-    padding: 4px 0;
-    background-color: #9ca3af;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 8px 0;
     color: white;
     text-align: center;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
-    transform-origin: left;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     z-index: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(90deg, transparent 10%, rgba(255, 255, 255, 0.3) 50%, transparent 90%);
+    background-size: 200% 100%;
+    animation: shine 3s infinite;
 }
 
-.todoCard::after {
+@keyframes shine {
+    0% {
+        background-position: 200% center;
+    }
+
+    100% {
+        background-position: -200% center;
+    }
+}
+
+.todoCard::before {
     background-color: #3b82f6;
-    content: "To Do";
+    content: "TO DO";
 }
 
-.doingCard::after {
+.doingCard::before {
     background-color: #f59e0b;
-    content: "In Progress";
+    content: "IN PROGRESS";
 }
 
-.doneCard::after {
+.doneCard::before {
     background-color: #10b981;
-    content: "Completed";
+    content: "COMPLETED";
 }
 
-.blockedCard::after {
+.blockedCard::before {
     background-color: #ef4444;
-    content: "Blocked";
+    content: "BLOCKED";
 }
 
 .taskTitle {
-    font-size: 17px;
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 700;
     color: #111827;
-    margin: 0 0 14px 0;
+    margin: 30px 0 18px 0;
     display: flex;
     align-items: center;
     position: relative;
-    padding-left: 24px;
+    padding-left: 0;
     line-height: 1.4;
     word-break: break-word;
+    transition: color 0.2s ease;
 }
 
-.taskTitle::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: currentColor;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9);
+.taskCard:hover .taskTitle {
+    color: #1e40af;
 }
 
-.todoCard .taskTitle::before {
-    background-color: #3b82f6;
+.doingCard:hover .taskTitle {
+    color: #92400e;
 }
 
-.doingCard .taskTitle::before {
-    background-color: #f59e0b;
+.doneCard:hover .taskTitle {
+    color: #065f46;
 }
 
-.doneCard .taskTitle::before {
-    background-color: #10b981;
-}
-
-.blockedCard .taskTitle::before {
-    background-color: #ef4444;
+.blockedCard:hover .taskTitle {
+    color: #991b1b;
 }
 
 .taskDescription {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.7;
     color: #4b5563;
-    margin-bottom: 16px;
-    padding-left: 24px;
+    margin-bottom: 20px;
+    padding-left: 0;
     position: relative;
     word-break: break-word;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid #e5e7eb;
 }
 
-.taskDescription::before {
-    position: absolute;
-    left: 8px;
-    color: #9ca3af;
-    font-size: 16px;
+.todoCard .taskDescription {
+    border-left-color: rgba(59, 130, 246, 0.3);
+}
+
+.doingCard .taskDescription {
+    border-left-color: rgba(245, 158, 11, 0.3);
+}
+
+.doneCard .taskDescription {
+    border-left-color: rgba(16, 185, 129, 0.3);
+}
+
+.blockedCard .taskDescription {
+    border-left-color: rgba(239, 68, 68, 0.3);
 }
 
 .taskMeta {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 16px;
-    padding-left: 24px;
+    margin-bottom: 20px;
+    padding-left: 0;
 }
 
 .taskBadge {
     font-size: 12px;
     font-weight: 600;
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
     display: inline-flex;
     align-items: center;
     text-transform: capitalize;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.taskBadge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .priorityLow {
-    background-color: #e0f2fe;
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
     color: #0369a1;
-    border: 1px solid #bae6fd;
 }
 
 .priorityMedium {
-    background-color: #fef3c7;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
     color: #92400e;
-    border: 1px solid #fde68a;
 }
 
 .priorityHigh {
-    background-color: #fee2e2;
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
     color: #991b1b;
-    border: 1px solid #fecaca;
 }
 
 .assignee {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    background-color: #f9fafb;
-    border-radius: 8px;
-    margin-top: 16px;
+    gap: 12px;
+    padding: 12px;
+    background-color: rgba(249, 250, 251, 0.7);
+    border-radius: 10px;
+    margin-top: 20px;
     font-size: 14px;
     color: #4b5563;
-    border-left: 3px solid #e5e7eb;
-    transition: all 0.2s ease;
-}
-
-.todoCard .assignee {
-    border-left-color: rgba(59, 130, 246, 0.5);
-}
-
-.doingCard .assignee {
-    border-left-color: rgba(245, 158, 11, 0.5);
-}
-
-.doneCard .assignee {
-    border-left-color: rgba(16, 185, 129, 0.5);
-}
-
-.blockedCard .assignee {
-    border-left-color: rgba(239, 68, 68, 0.5);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(229, 231, 235, 0.5);
 }
 
 .assignee:hover {
-    background-color: #f3f4f6;
+    background-color: rgba(243, 244, 246, 0.8);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .assigneeAvatar {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
     color: white;
-    font-size: 14px;
+    font-size: 15px;
     flex-shrink: 0;
-    background: linear-gradient(135deg, #4f46e5, #6366f1);
-    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.assigneeAvatar::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to bottom right,
+            rgba(255, 255, 255, 0.3),
+            rgba(255, 255, 255, 0));
+    transform: rotate(30deg);
 }
 
 .todoCard .assigneeAvatar {
     background: linear-gradient(135deg, #2563eb, #3b82f6);
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
 .doingCard .assigneeAvatar {
     background: linear-gradient(135deg, #d97706, #f59e0b);
-    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
 }
 
 .doneCard .assigneeAvatar {
     background: linear-gradient(135deg, #059669, #10b981);
-    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
 }
 
 .blockedCard .assigneeAvatar {
     background: linear-gradient(135deg, #dc2626, #ef4444);
-    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
 }
 
 .assigneeName {
@@ -257,108 +290,143 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 150px;
+    max-width: 160px;
+    transition: color 0.2s ease;
 }
 
-.assigneeLabel {
-    font-weight: 600;
-    color: #6b7280;
-    margin-right: 4px;
+.assignee:hover .assigneeName {
+    color: #111827;
 }
 
 .actions {
     display: flex;
-    gap: 10px;
-    margin-top: 16px;
-    padding-left: 24px;
+    gap: 12px;
+    margin-top: 20px;
+    padding-left: 0;
 }
 
 .deleteButton,
 .editButton {
     border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 10px 18px;
+    border-radius: 8px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 80px;
+    min-width: 90px;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
 }
 
 .deleteButton {
-    background-color: #fee2e2;
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
     color: #dc2626;
-    border: 1px solid #fecaca;
 }
 
 .deleteButton:hover {
-    background-color: #fecaca;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.15);
+    background: linear-gradient(135deg, #fecaca, #fca5a5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.15);
 }
 
 .deleteButton:active {
     transform: translateY(0);
-    box-shadow: none;
 }
 
 .editButton {
-    background-color: #e0f2fe;
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
     color: #0369a1;
-    border: 1px solid #bae6fd;
 }
 
 .editButton:hover {
-    background-color: #bae6fd;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(3, 105, 161, 0.15);
+    background: linear-gradient(135deg, #bae6fd, #7dd3fc);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(3, 105, 161, 0.15);
 }
 
 .editButton:active {
     transform: translateY(0);
-    box-shadow: none;
+}
+
+.buttonIcon {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+}
+
+.deleteButton:hover .buttonIcon {
+    transform: scale(1.1);
+}
+
+.editButton:hover .buttonIcon {
+    transform: scale(1.1);
 }
 
 .editModal {
     background-color: white;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 16px;
+    padding: 24px;
     width: 100%;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    border-left: 4px solid #6366f1;
-    margin-bottom: 16px;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #6366f1;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.3s ease-out;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .taskCard {
-        padding: 16px;
+        width: 100%;
+        padding: 20px;
     }
 
     .taskTitle {
-        font-size: 16px;
-        padding-left: 20px;
-    }
-
-    .taskDescription {
-        padding-left: 20px;
-    }
-
-    .taskMeta {
-        padding-left: 20px;
+        font-size: 17px;
     }
 
     .actions {
-        padding-left: 20px;
         flex-wrap: wrap;
     }
 
     .deleteButton,
     .editButton {
-        min-width: 70px;
-        padding: 6px 12px;
-        font-size: 13px;
+        flex: 1;
+        min-width: auto;
+        padding: 10px;
     }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+
+.taskCard:hover {
+    animation: float 3s ease-in-out infinite;
 }
