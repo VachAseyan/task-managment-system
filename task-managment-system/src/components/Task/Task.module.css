@@ -3,11 +3,13 @@
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 16px;
+    width: 380px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     border-left: 4px solid;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     overflow: hidden;
+    cursor: grab;
 }
 
 .taskCard:hover {
@@ -16,12 +18,12 @@
 }
 
 .todoCard {
-    border-left-color: #3b82f6;
+    border-color: #3b82f6;
     background: linear-gradient(to right, #f8fafc 0%, white 15%);
 }
 
 .doingCard {
-    border-left-color: #f59e0b;
+    border-color: #f59e0b;
     background: linear-gradient(to right, #fffbeb 0%, white 15%);
 }
 

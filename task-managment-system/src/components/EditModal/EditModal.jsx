@@ -16,6 +16,7 @@ function EditModal({
     editUserChange,
     handleEditModeToggle,
 }) {
+
     const [updatedTitle, setUpdatedTitle] = useState(titleInput);
     const [updatedDescription, setUpdatedDescription] = useState(descriptionInput);
     const [updatedStatus, setUpdatedStatus] = useState(status);
@@ -37,7 +38,7 @@ function EditModal({
                 <div className={style.modalHeader}>
                     <h2 className={style.modalTitle}>Edit Task</h2>
                     <button className={style.closeButton} onClick={handleEditModeToggle}>
-                        &times;
+                        ×
                     </button>
                 </div>
 
@@ -111,14 +112,13 @@ function EditModal({
 
                 <button
                     className={style.submitButton}
-                    disabled={!updatedTitle}
+                    disabled={!updatedTitle || !updatedUser}
                     onClick={handleSave}
                 >
                     Save Changes
                 </button>
                 <button
-                    className={style.submitButton}
-                    disabled={!updatedTitle}
+                    className={`${style.submitButton} ${style.cancelButton}`}
                     onClick={handleEditModeToggle}
                 >
                     Cancel

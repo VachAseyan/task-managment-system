@@ -4,6 +4,7 @@ const ACTIONS = {
     ADD_TASK: "add-task",
     DELETE_TASK: "delete-task",
     UPDATE_TASK: "update-task",
+    DELETE_ALL: "delete-all"
 };
 
 const reducer = (state, action) => {
@@ -25,21 +26,23 @@ const reducer = (state, action) => {
                 },
             ];
         case ACTIONS.DELETE_TASK:
-            return state.filter((task) => task.id !== payload.id);
+            return state.filter(task => task.id !== payload.id);
         case ACTIONS.UPDATE_TASK:
-            return state.map((task) => {
+            return state.map(task => {
                 if (task.id === payload.id) {
                     return {
                         ...task,
-                        title: payload.title !== undefined ? payload.title : task.title,
-                        description: payload.description !== undefined ? payload.description : task.description,
-                        status: payload.status !== undefined ? payload.status : task.status,
-                        priority: payload.priority !== undefined ? payload.priority : task.priority,
-                        user: payload.user !== undefined ? payload.user : task.user,
+                        title: payload.title ?? task.title,
+                        description: payload.description ?? task.description,
+                        status: payload.status ?? task.status,
+                        priority: payload.priority ?? task.priority,
+                        user: payload.user ?? task.user,
                     };
                 }
                 return task;
             });
+        case ACTIONS.DELETE_ALL:
+            return []
     }
 };
 

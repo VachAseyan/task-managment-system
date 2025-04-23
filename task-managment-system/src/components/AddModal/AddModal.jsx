@@ -101,7 +101,7 @@ function AddModal({
                 <button
                     className={style.submitButton}
                     onClick={addTask}
-                    disabled={!titleInput || !descriptionInput || !user}
+                    disabled={!titleInput || !descriptionInput || !status || !priority}
                 >
                     Create Task
                 </button>
